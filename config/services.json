@@ -1,0 +1,125 @@
+{
+  "title": "Hesty Status",
+  "site": "https://hesty.io",
+  "intervalMinutes": 5,
+  "groups": [
+    {
+      "name": "Hesty",
+      "services": [
+        {
+          "id": "website",
+          "name": "Website",
+          "description": "hesty.io loads",
+          "type": "http",
+          "url": "https://hesty.io",
+          "contains": "id=\"root\"",
+          "link": "https://hesty.io"
+        },
+        {
+          "id": "api",
+          "name": "API",
+          "description": "The Hesty backend answers requests (login uses this endpoint)",
+          "type": "http",
+          "url": "https://api.hesty.io/api/v1/auth/siwe/nonce",
+          "contains": "nonce"
+        },
+        {
+          "id": "database",
+          "name": "Database",
+          "description": "The backend can reach its database",
+          "type": "http",
+          "url": "https://api.hesty.io/api/v1/health"
+        },
+        {
+          "id": "assets",
+          "name": "Files & translations (CDN)",
+          "description": "Images, documents and translations served from DigitalOcean Spaces",
+          "type": "http",
+          "url": "https://hesty.fra1.cdn.digitaloceanspaces.com/public/locales/pt/home.json"
+        },
+        {
+          "id": "email",
+          "name": "Email delivery",
+          "description": "The SMTP server Hesty sends emails through accepts logins",
+          "type": "smtp"
+        }
+      ]
+    },
+    {
+      "name": "Blockchain",
+      "services": [
+        {
+          "id": "base-rpc",
+          "name": "Base RPC",
+          "description": "Base mainnet answers and keeps producing blocks",
+          "type": "jsonrpc",
+          "url": "https://mainnet.base.org",
+          "maxBlockAgeSec": 60
+        },
+        {
+          "id": "base-network",
+          "name": "Base network",
+          "description": "Base's own status page",
+          "type": "statuspage",
+          "page": "https://status.base.org",
+          "components": ["Mainnet > Block production", "Mainnet > Public RPC API"]
+        }
+      ]
+    },
+    {
+      "name": "Third parties",
+      "services": [
+        {
+          "id": "reown",
+          "name": "Reown (login & wallets)",
+          "description": "Email/social login, embedded wallets and WalletConnect",
+          "type": "statuspage",
+          "page": "https://status.reown.com",
+          "components": ["AppKit", "Relay", "Blockchain API", "Verify API (for WalletConnect Sign)"]
+        },
+        {
+          "id": "monerium",
+          "name": "Monerium (IBAN & EURe)",
+          "description": "Monerium API answers",
+          "type": "http",
+          "url": "https://api.monerium.app/",
+          "contains": "Monerium",
+          "link": "https://monerium.com"
+        },
+        {
+          "id": "onfido",
+          "name": "Onfido (KYC)",
+          "description": "Identity verification, Europe region",
+          "type": "statuspage",
+          "page": "https://status.onfido.com",
+          "components": [
+            "Europe (onfido.com) > API",
+            "Europe (onfido.com) > Document Verification",
+            "Europe (onfido.com) > Facial Similarity",
+            "Europe (onfido.com) > Webhooks",
+            "JS SDK Services"
+          ]
+        },
+        {
+          "id": "coinbase-cdp",
+          "name": "Coinbase Developer Platform",
+          "description": "CDP wallets and onchain tools",
+          "type": "statuspage",
+          "page": "https://status.coinbase.com",
+          "components": [
+            "Coinbase Developer Platform > Wallets",
+            "Coinbase Developer Platform > Onchain Tools"
+          ]
+        },
+        {
+          "id": "digitalocean",
+          "name": "DigitalOcean (hosting)",
+          "description": "Servers and file storage in Frankfurt",
+          "type": "statuspage",
+          "page": "https://status.digitalocean.com",
+          "components": ["Droplets > FRA1", "Spaces > FRA1", "Spaces CDN > FRA1", "Networking > FRA1"]
+        }
+      ]
+    }
+  ]
+}

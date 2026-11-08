@@ -1,0 +1,90 @@
+name: Status checks
+
+on:
+  schedule:
+    # GitHub's minimum; scheduled runs can start a few minutes late under load.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['docs/**', 'config/**', 'scripts/**', '.github/workflows/status.yml']
+
+permissions:
+  contents: write # push results to the status-data branch
+  pages: write
+  id-token: write
+
+# One run at a time, so two runs never overwrite each other's results.
+concurrency:
+  group: status-checks
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Results live on their own branch as a single, force-pushed commit, so main's
+      # history isn't flooded with a commit every 5 minutes.
+      - name: Load previous results
+        run: |
+          mkdir -p docs/data
+          if git fetch --depth=1 origin status-data 2>/dev/null; then
+            git show FETCH_HEAD:status.json > docs/data/status.json
+          fi
+
+      - name: Run checks
+        run: node scripts/check.mjs
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ALERT_SMTP_HOST: ${{ secrets.ALERT_SMTP_HOST }}
+          ALERT_SMTP_PORT: ${{ secrets.ALERT_SMTP_PORT }}
+          ALERT_SMTP_USER: ${{ secrets.ALERT_SMTP_USER }}
+          ALERT_SMTP_PASS: ${{ secrets.ALERT_SMTP_PASS }}
+          ALERT_FROM: ${{ secrets.ALERT_FROM }}
+          ALERT_TO: ${{ secrets.ALERT_TO }}
+          STATUS_PAGE_URL: ${{ vars.STATUS_PAGE_URL }}
+
+      # Saved and published even when the run failed (a failed alert email fails the run).
+      - name: Save results
+        if: always() && hashFiles('docs/data/status.json') != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dir="$(mktemp -d)"
+          cp docs/data/status.json "$dir/"
+          cd "$dir"
+          git init -q
+          git add status.json
+          git -c user.name="hesty-status" -c user.email="hesty-status@users.noreply.github.com" commit -qm "Status data"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:status-data
+
+      - name: Configure Pages
+        if: always() && hashFiles('docs/data/status.json') != ''
+        uses: actions/configure-pages@v5
+
+      - name: Upload page
+        if: always() && hashFiles('docs/data/status.json') != ''
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Publish page
+        id: deploy
+        if: always() && hashFiles('docs/data/status.json') != ''
+        uses: actions/deploy-pages@v4

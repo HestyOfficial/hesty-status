@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hesty Status</title>
+  <meta name="description" content="Live status of Hesty and the services it depends on.">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root {
+      --bg: #f4f7f7;
+      --surface: #ffffff;
+      --border: #e1e8e8;
+      --text: #10292a;
+      --muted: #5f7273;
+      --faint: #8a9a9b;
+      --brand: #197176;
+      --brand-strong: #0f3d3f;
+      --mint: #00e0b0;
+      --up: #22a06b;
+      --degraded: #e2a400;
+      --down: #d64545;
+      --unknown: #a3b0b1;
+      --empty: #e4eaea;
+      --up-soft: #e3f5ec;
+      --degraded-soft: #fdf3d7;
+      --down-soft: #fbe5e5;
+      --unknown-soft: #edf1f1;
+      --shadow: 0 1px 2px rgba(16, 41, 42, .06), 0 4px 16px rgba(16, 41, 42, .04);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1718;
+        --surface: #112223;
+        --border: #1f3536;
+        --text: #e6f0f0;
+        --muted: #9db0b1;
+        --faint: #6f8586;
+        --brand: #3fb5ae;
+        --brand-strong: #081314;
+        --up: #2fbf80;
+        --degraded: #f0b72f;
+        --down: #f06464;
+        --unknown: #5d7172;
+        --empty: #1d3132;
+        --up-soft: #12332a;
+        --degraded-soft: #3a2f10;
+        --down-soft: #3d1a1a;
+        --unknown-soft: #1a2b2c;
+        --shadow: none;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0b1718;
+      --surface: #112223;
+      --border: #1f3536;
+      --text: #e6f0f0;
+      --muted: #9db0b1;
+      --faint: #6f8586;
+      --brand: #3fb5ae;
+      --brand-strong: #081314;
+      --up: #2fbf80;
+      --degraded: #f0b72f;
+      --down: #f06464;
+      --unknown: #5d7172;
+      --empty: #1d3132;
+      --up-soft: #12332a;
+      --degraded-soft: #3a2f10;
+      --down-soft: #3d1a1a;
+      --unknown-soft: #1a2b2c;
+      --shadow: none;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    a { color: var(--brand); }
+
+    .top {
+      background: var(--brand-strong);
+      padding: 20px 16px 72px;
+    }
+    .top-inner, main { max-width: 880px; margin: 0 auto; }
+    .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
+    .brand img { height: 30px; width: auto; display: block; }
+    .brand span { color: #cfe7e6; font-size: 15px; border-left: 1px solid rgba(255,255,255,.25); padding-left: 10px; }
+    .top a.site { color: #cfe7e6; font-size: 14px; text-decoration: none; white-space: nowrap; }
+    .top a.site:hover { color: #fff; }
+
+    main { padding: 0 16px 48px; margin-top: -48px; }
+
+    .banner {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px 20px; box-shadow: var(--shadow);
+      border-left: 6px solid var(--state, var(--unknown));
+    }
+    .banner .icon {
+      flex: none; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; color: #fff; background: var(--state, var(--unknown));
+      font-weight: 700;
+    }
+    .banner h1 { font-size: 20px; margin: 0; line-height: 1.3; }
+    .banner p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+    .notice {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+      background: var(--degraded-soft); color: var(--text); border: 1px solid var(--border);
+    }
+
+    .group {
+      margin-top: 24px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; box-shadow: var(--shadow); overflow: hidden;
+    }
+    .group > h2 {
+      margin: 0; padding: 14px 20px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;
+    }
+    .service { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .service:last-child { border-bottom: 0; }
+    .row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .name { font-weight: 600; min-width: 0; }
+    .name a { color: inherit; text-decoration: none; }
+    .name a:hover { text-decoration: underline; }
+    .desc { display: block; font-weight: 400; color: var(--faint); font-size: 13px; }
+    .pill {
+      flex: none; font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: 999px;
+      color: var(--c); background: var(--soft);
+    }
+    .message { margin: 8px 0 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+
+    .bars { display: flex; gap: 2px; height: 32px; margin-top: 12px; }
+    .bar {
+      flex: 1 1 0; min-width: 0; border-radius: 2px; background: var(--empty);
+      border: 0; padding: 0; cursor: default; position: relative;
+    }
+    .bar.up { background: var(--up); }
+    .bar.degraded { background: var(--degraded); }
+    .bar.partial { background: color-mix(in srgb, var(--down) 55%, var(--degraded)); }
+    .bar.down { background: var(--down); }
+    .bar:hover, .bar:focus-visible { opacity: .75; outline: none; }
+    .scale { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 12px; color: var(--faint); }
+    .scale .uptime { color: var(--muted); }
+    .days-short { display: none; }
+
+    .tooltip {
+      position: fixed; z-index: 10; pointer-events: none; max-width: 260px;
+      background: var(--text); color: var(--bg); font-size: 12px; line-height: 1.4;
+      padding: 8px 10px; border-radius: 6px; opacity: 0; transition: opacity .1s;
+    }
+    .tooltip.show { opacity: 1; }
+    .tooltip strong { display: block; }
+
+    .incidents { margin-top: 32px; }
+    .incidents h2 { font-size: 18px; margin: 0 0 12px; }
+    .incident {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 10px; border-left: 4px solid var(--c);
+    }
+    .incident .title { font-weight: 600; }
+    .incident .meta { font-size: 13px; color: var(--faint); margin-top: 2px; }
+    .incident .msg { font-size: 13px; color: var(--muted); margin-top: 6px; overflow-wrap: anywhere; }
+    .empty { color: var(--faint); font-size: 14px; }
+
+    footer { margin-top: 32px; font-size: 12px; color: var(--faint); text-align: center; }
+    .legend { display: inline-flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 8px; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+
+    .loading { padding: 40px 0; text-align: center; color: var(--faint); }
+
+    @media (max-width: 640px) {
+      .top { padding-bottom: 64px; }
+      .brand img { height: 24px; }
+      .banner { padding: 14px 16px; }
+      .banner h1 { font-size: 17px; }
+      .service, .group > h2 { padding-left: 16px; padding-right: 16px; }
+      .bar.old { display: none; }
+      .days-long { display: none; }
+      .days-short { display: inline; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="./"><img src="logo.svg" alt="Hesty" width="72" height="30"><span>Status</span></a>
+      <a class="site" href="https://hesty.io">hesty.io →</a>
+    </div>
+  </header>
+
+  <main>
+    <div id="app"><div class="loading">Loading status…</div></div>
+    <footer id="footer"></footer>
+  </main>
+  <div class="tooltip" id="tooltip" role="tooltip"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var REFRESH_MS = 60 * 1000;
+      var SHORT_DAYS = 30; // shown on phones
+      var STATE = {
+        up: { label: 'Operational', color: '--up', soft: '--up-soft' },
+        degraded: { label: 'Degraded', color: '--degraded', soft: '--degraded-soft' },
+        down: { label: 'Down', color: '--down', soft: '--down-soft' },
+        unknown: { label: 'Unknown', color: '--unknown', soft: '--unknown-soft' }
+      };
+
+      var app = document.getElementById('app');
+      var footer = document.getElementById('footer');
+      var tooltip = document.getElementById('tooltip');
+
+      function esc(text) {
+        return String(text == null ? '' : text).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+      function pillStyle(status) {
+        var s = STATE[status] || STATE.unknown;
+        return '--c:var(' + s.color + ');--soft:var(' + s.soft + ')';
+      }
+      function relative(iso, now) {
+        var minutes = Math.round((now - new Date(iso)) / 60000);
+        if (minutes < 1) return 'just now';
+        if (minutes < 60) return minutes + ' min ago';
+        var hours = Math.round(minutes / 60);
+        if (hours < 48) return hours + ' h ago';
+        return Math.round(hours / 24) + ' days ago';
+      }
+      function duration(ms) {
+        var minutes = Math.max(1, Math.round(ms / 60000));
+        if (minutes < 60) return minutes + ' min';
+        var hours = Math.floor(minutes / 60);
+        if (hours < 48) return hours + ' h' + (minutes % 60 ? ' ' + (minutes % 60) + ' min' : '');
+        return Math.round(hours / 24) + ' days';
+      }
+      var dateTimeFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+      var dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeZone: 'UTC' });
+      function dayKey(date) { return date.toISOString().slice(0, 10); }
+      function formatUptime(value) {
+        if (value == null) return 'No data';
+        var pct = value * 100;
+        return (pct === 100 ? '100' : pct >= 99.99 ? '99.99' : pct.toFixed(2)) + '% uptime';
+      }
+
+      function dayClass(day) {
+        if (!day || !day.checks) return '';
+        if (day.down > 0) return day.down / day.checks >= 0.05 ? 'down' : 'partial';
+        if (day.degraded > 0) return 'degraded';
+        return 'up';
+      }
+
+      function renderBars(service, days, now) {
+        var bars = '';
+        var totalChecks = 0;
+        var totalDown = 0;
+        for (var i = days - 1; i >= 0; i -= 1) {
+          var date = new Date(now.getTime() - i * 86400000);
+          var key = dayKey(date);
+          var day = service.history && service.history[key];
+          if (day) { totalChecks += day.checks; totalDown += day.down; }
+          var tip = dateFmt.format(date) + '|' + (day && day.checks
+            ? formatUptime(1 - day.down / day.checks) +
+              (day.down ? ' · down in ' + day.down + ' of ' + day.checks + ' checks' : '') +
+              (day.degraded ? ' · degraded in ' + day.degraded : '')
+            : 'No data');
+          bars += '<button type="button" class="bar ' + dayClass(day) + (i >= SHORT_DAYS ? ' old' : '') +
+            '" data-tip="' + esc(tip) + '" aria-label="' + esc(tip.replace('|', ': ')) + '"></button>';
+        }
+        return {
+          html: bars,
+          uptime: totalChecks ? 1 - totalDown / totalChecks : null
+        };
+      }
+
+      function shortUptime(service, now) {
+        var checks = 0, down = 0;
+        for (var i = 0; i < SHORT_DAYS; i += 1) {
+          var day = service.history && service.history[dayKey(new Date(now.getTime() - i * 86400000))];
+          if (day) { checks += day.checks; down += day.down; }
+        }
+        return checks ? 1 - down / checks : null;
+      }
+
+      function render(data) {
+        var now = new Date();
+        var days = data.historyDays || 90;
+        var services = data.services || {};
+        var all = Object.keys(services).map(function (id) { return services[id]; });
+        var down = all.filter(function (s) { return s.status === 'down'; });
+        var degraded = all.filter(function (s) { return s.status === 'degraded'; });
+        var ageMin = (now - new Date(data.generatedAt)) / 60000;
+        var stale = ageMin > Math.max(20, (data.intervalMinutes || 5) * 4);
+
+        var overall, title;
+        if (down.length) {
+          overall = 'down';
+          title = down.length === all.length ? 'Major outage' : (down.length === 1 ? down[0].name + ' is down' : down.length + ' services are down');
+        } else if (degraded.length) {
+          overall = 'degraded';
+          title = degraded.length === 1 ? degraded[0].name + ' is degraded' : 'Some services are degraded';
+        } else {
+          overall = 'up';
+          title = 'All systems operational';
+        }
+
+        var html = '<section class="banner" style="--state:var(' + STATE[overall].color + ')">' +
+          '<div class="icon" aria-hidden="true">' + (overall === 'up' ? '✓' : '!') + '</div>' +
+          '<div><h1>' + esc(title) + '</h1><p>Last checked ' + esc(relative(data.generatedAt, now)) +
+          ' · ' + esc(dateTimeFmt.format(new Date(data.generatedAt))) + '</p></div></section>';
+        if (stale) {
+          html += '<div class="notice">Monitoring is delayed: the last check ran ' + esc(relative(data.generatedAt, now)) +
+            '. The statuses below may be out of date.</div>';
+        }
+
+        (data.groups || []).forEach(function (group) {
+          var items = group.services.map(function (id) { return services[id] && Object.assign({ id: id }, services[id]); }).filter(Boolean);
+          if (!items.length) return;
+          var groupDown = items.filter(function (s) { return s.status !== 'up' && s.status !== 'unknown'; }).length;
+          html += '<section class="group"><h2><span>' + esc(group.name) + '</span><span>' +
+            (groupDown ? groupDown + ' affected' : '') + '</span></h2>';
+          items.forEach(function (s) {
+            var state = STATE[s.status] || STATE.unknown;
+            var bars = renderBars(s, days, now);
+            var name = s.link ? '<a href="' + esc(s.link) + '" target="_blank" rel="noopener">' + esc(s.name) + '</a>' : esc(s.name);
+            html += '<div class="service"><div class="row"><div class="name">' + name +
+              (s.description ? '<span class="desc">' + esc(s.description) + '</span>' : '') + '</div>' +
+              '<span class="pill" style="' + pillStyle(s.status) + '">' + state.label + '</span></div>' +
+              (s.status !== 'up' && s.message ? '<p class="message">' + esc(s.message) +
+                (s.status !== 'unknown' ? ' · since ' + esc(relative(s.since, now)) : '') + '</p>' : '') +
+              '<div class="bars">' + bars.html + '</div>' +
+              '<div class="scale"><span><span class="days-long">' + days + ' days ago</span><span class="days-short">' + SHORT_DAYS + ' days ago</span></span>' +
+              '<span class="uptime"><span class="days-long">' + formatUptime(bars.uptime) + '</span><span class="days-short">' + formatUptime(shortUptime(s, now)) + '</span></span>' +
+              '<span>Today</span></div></div>';
+          });
+          html += '</section>';
+        });
+
+        var cutoff = now.getTime() - 14 * 86400000;
+        var recent = (data.incidents || []).filter(function (i) {
+          return !i.resolvedAt || new Date(i.resolvedAt).getTime() >= cutoff;
+        });
+        html += '<section class="incidents"><h2>Incidents, last 14 days</h2>';
+        if (!recent.length) {
+          html += '<p class="empty">No incidents in the last 14 days.</p>';
+        } else {
+          recent.forEach(function (i) {
+            var ongoing = !i.resolvedAt;
+            var end = ongoing ? now : new Date(i.resolvedAt);
+            html += '<div class="incident" style="' + pillStyle(ongoing ? i.status : 'up') + '">' +
+              '<div class="title">' + esc(i.serviceName) + ' · ' + (i.status === 'down' ? 'outage' : 'degraded') +
+              (ongoing ? ' <span class="pill" style="' + pillStyle(i.status) + '">Ongoing</span>' : '') + '</div>' +
+              '<div class="meta">' + esc(dateTimeFmt.format(new Date(i.startedAt))) +
+              (ongoing ? ' · for ' : ' · lasted ') + esc(duration(end - new Date(i.startedAt))) + '</div>' +
+              (i.message ? '<div class="msg">' + esc(i.message) + '</div>' : '') + '</div>';
+          });
+        }
+        html += '</section>';
+        app.innerHTML = html;
+
+        footer.innerHTML = '<div class="legend">' +
+          '<span><i style="background:var(--up)"></i>No downtime</span>' +
+          '<span><i style="background:var(--degraded)"></i>Degraded</span>' +
+          '<span><i class="bar partial" style="display:inline-block"></i>Some downtime</span>' +
+          '<span><i style="background:var(--down)"></i>Outage</span>' +
+          '<span><i style="background:var(--empty)"></i>No data</span></div>' +
+          '<div>Checked every ' + (data.intervalMinutes || 5) + ' minutes from outside Hesty\'s servers. Third-party statuses come from each provider\'s own status page.</div>';
+      }
+
+      function load() {
+        fetch('data/status.json?t=' + Date.now(), { cache: 'no-store' })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(render)
+          .catch(function () {
+            if (!app.querySelector('.banner')) {
+              app.innerHTML = '<div class="loading">Status data is not available yet. The first check runs within a few minutes of setup.</div>';
+            }
+          });
+      }
+
+      // Day tooltips (hover, keyboard focus, tap).
+      function showTip(target) {
+        var tip = target.getAttribute('data-tip');
+        if (!tip) return;
+        var parts = tip.split('|');
+        tooltip.innerHTML = '<strong>' + esc(parts[0]) + '</strong>' + esc(parts[1]);
+        tooltip.classList.add('show');
+        var rect = target.getBoundingClientRect();
+        var tipRect = tooltip.getBoundingClientRect();
+        var left = Math.min(Math.max(8, rect.left + rect.width / 2 - tipRect.width / 2), window.innerWidth - tipRect.width - 8);
+        var top = rect.top - tipRect.height - 8;
+        if (top < 8) top = rect.bottom + 8;
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+      }
+      function hideTip() { tooltip.classList.remove('show'); }
+      document.addEventListener('mouseover', function (e) { if (e.target.classList.contains('bar')) showTip(e.target); });
+      document.addEventListener('mouseout', function (e) { if (e.target.classList.contains('bar')) hideTip(); });
+      document.addEventListener('focusin', function (e) { if (e.target.classList.contains('bar')) showTip(e.target); });
+      document.addEventListener('focusout', hideTip);
+      document.addEventListener('click', function (e) { if (e.target.classList.contains('bar')) showTip(e.target); else hideTip(); });
+      window.addEventListener('scroll', hideTip, { passive: true });
+
+      load();
+      setInterval(load, REFRESH_MS);
+    })();
+  </script>
+</body>
+</html>
