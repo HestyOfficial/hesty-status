@@ -154,16 +154,19 @@ async function checkStatuspage(service) {
   return { status, message: [incident?.name, affected.join('; ')].filter(Boolean).join(' · ') };
 }
 
+// Secrets pasted with stray spaces would otherwise break the SMTP login.
+const env = (name) => process.env[name]?.trim() || undefined;
+
 const smtpTransport = (prefix) => {
-  const host = process.env[`${prefix}HOST`];
+  const host = env(`${prefix}HOST`);
   if (!host) return null;
-  const port = Number(process.env[`${prefix}PORT`] ?? 587);
-  const user = process.env[`${prefix}USER`];
+  const port = Number(env(`${prefix}PORT`) ?? 587);
+  const user = env(`${prefix}USER`);
   return nodemailer.createTransport({
     host,
     port,
     secure: port === 465,
-    auth: user ? { user, pass: process.env[`${prefix}PASS`] } : undefined,
+    auth: user ? { user, pass: env(`${prefix}PASS`) } : undefined,
     connectionTimeout: DEFAULT_TIMEOUT_MS,
     greetingTimeout: DEFAULT_TIMEOUT_MS,
     socketTimeout: DEFAULT_TIMEOUT_MS,
@@ -247,7 +250,7 @@ const escapeHtml = (text) =>
   String(text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 const statusPageUrl = () => {
-  if (process.env.STATUS_PAGE_URL) return process.env.STATUS_PAGE_URL;
+  if (env('STATUS_PAGE_URL')) return env('STATUS_PAGE_URL');
   const [owner, repo] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
   return owner && repo ? `https://${owner.toLowerCase()}.github.io/${repo}/` : null;
 };
@@ -303,12 +306,12 @@ async function sendAlerts(alerts, config) {
   // ALERT_SMTP_* lets alerts go through a different provider than the Hesty SMTP server
   // being monitored, so "email is down" can still be reported. Falls back to SMTP_*.
   const transport = smtpTransport('ALERT_SMTP_') ?? smtpTransport('SMTP_');
-  const to = process.env.ALERT_TO;
+  const to = env('ALERT_TO');
   if (!transport || !to) {
     console.warn('Alert email not configured (ALERT_TO / SMTP_HOST missing); skipping.');
     return null;
   }
-  const from = process.env.ALERT_FROM ?? process.env.ALERT_SMTP_USER ?? process.env.SMTP_USER;
+  const from = env('ALERT_FROM') ?? env('ALERT_SMTP_USER') ?? env('SMTP_USER');
   try {
     await transport.sendMail({ from, to, ...buildEmail(alerts, config) });
     console.log(`Alert email sent to ${to.split(',').length} recipient(s).`);
