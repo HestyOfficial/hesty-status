@@ -2,7 +2,7 @@
 
 Status page and email alerts for Hesty and the third parties it depends on.
 
-- **Runs outside Hesty's servers.** GitHub Actions checks every service every 5 minutes, so the page and the alerts keep working when Hesty itself is down.
+- **Runs outside Hesty's servers.** GitHub Actions checks every service every hour, so the page and the alerts keep working when Hesty itself is down.
 - **Page:** current status, 90-day uptime bars (30 on phones) and incidents from the last 14 days. It's published on GitHub Pages.
 - **Alerts:** an email when a service goes down, and another when it's back up, with how long it was down. Each outage sends one email, not one per check.
 
@@ -52,7 +52,7 @@ Defined in [`config/services.json`](config/services.json).
    **Recommended:** send alerts through a different email provider than the one being monitored. Then a problem with Hesty's email server can still be reported. Set `ALERT_SMTP_HOST`, `ALERT_SMTP_PORT`, `ALERT_SMTP_USER` and `ALERT_SMTP_PASS`, e.g. a Gmail app password or a Resend or Brevo account. Without them, alerts use the `SMTP_*` settings.
 
    **Backup channel:** if an alert email fails to send, the workflow run fails. GitHub then emails the repo's admins its usual "run failed" notice.
-5. **Run it once:** Actions → *Status checks* → *Run workflow*. After that it runs every 5 minutes. The page URL appears on the run, e.g. `https://<org>.github.io/hesty-status/`.
+5. **Run it once:** Actions → *Status checks* → *Run workflow*. After that it runs every hour. The page URL appears on the run, e.g. `https://<org>.github.io/hesty-status/`.
 
 ### Optional: status.hesty.io
 
@@ -97,8 +97,8 @@ Without SMTP env vars, alerts are only printed.
 - `scripts/check.mjs` runs the checks. It records each day's results (`checks`, `down`, `degraded`) for 90 days, opens and closes incidents, and sends the emails.
 - Results are stored in `status.json` on the `status-data` branch. That branch is a single commit, replaced on every run, so `main`'s history stays clean.
 - The workflow then publishes `docs/` together with that file to GitHub Pages.
-- The page reloads the data every minute. If the last check is more than 20 minutes old, it shows a "monitoring delayed" warning.
+- The page reloads the data every minute. If no check has run for 3 check intervals (3 hours), it shows a "monitoring delayed" warning.
 
 **Limitations:**
-- **Late runs:** GitHub can start scheduled runs a few minutes late when it's busy, so an alert can take about 5–15 minutes to arrive.
+- **Late runs:** GitHub can start scheduled runs a few minutes late when it's busy, so an alert can take up to about an hour (sometimes a bit more) to arrive. Outages shorter than an hour that start and end between two checks are not seen.
 - **Scheduled runs can be paused:** in public repos, GitHub turns off scheduled workflows after 60 days with no activity in the repo. It emails a warning first, and one click on the Actions tab turns them back on. Pushing any small commit now and then avoids it.

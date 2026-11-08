@@ -245,6 +245,10 @@
       }
       var dateTimeFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
       var dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeZone: 'UTC' });
+      function every(minutes) {
+        if (minutes % 60 === 0) return minutes === 60 ? 'every hour' : 'every ' + minutes / 60 + ' hours';
+        return 'every ' + minutes + ' minutes';
+      }
       function dayKey(date) { return date.toISOString().slice(0, 10); }
       function formatUptime(value) {
         if (value == null) return 'No data';
@@ -299,7 +303,7 @@
         var down = all.filter(function (s) { return s.status === 'down'; });
         var degraded = all.filter(function (s) { return s.status === 'degraded'; });
         var ageMin = (now - new Date(data.generatedAt)) / 60000;
-        var stale = ageMin > Math.max(20, (data.intervalMinutes || 5) * 4);
+        var stale = ageMin > Math.max(20, (data.intervalMinutes || 5) * 3);
 
         var overall, title;
         if (down.length) {
@@ -373,7 +377,7 @@
           '<span><i class="bar partial" style="display:inline-block"></i>Some downtime</span>' +
           '<span><i style="background:var(--down)"></i>Outage</span>' +
           '<span><i style="background:var(--empty)"></i>No data</span></div>' +
-          '<div>Checked every ' + (data.intervalMinutes || 5) + ' minutes from outside Hesty\'s servers. Third-party statuses come from each provider\'s own status page.</div>';
+          '<div>Checked ' + every(data.intervalMinutes || 5) + ' from outside Hesty\'s servers. Third-party statuses come from each provider\'s own status page.</div>';
       }
 
       function load() {

@@ -2,8 +2,8 @@ name: Status checks
 
 on:
   schedule:
-    # GitHub's minimum; scheduled runs can start a few minutes late under load.
-    - cron: '*/5 * * * *'
+    # Hourly at :17, off the hour mark (runs scheduled at :00 start latest).
+    - cron: '17 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -37,7 +37,7 @@ jobs:
       - run: npm ci
 
       # Results live on their own branch as a single, force-pushed commit, so main's
-      # history isn't flooded with a commit every 5 minutes.
+      # history isn't flooded with a commit on every run.
       - name: Load previous results
         run: |
           mkdir -p docs/data

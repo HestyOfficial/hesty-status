@@ -2,7 +2,7 @@
 // Runs every check in config/services.json, records the results in docs/data/status.json
 // (read by the status page) and emails an alert when a service goes down or recovers.
 //
-// Run by .github/workflows/status.yml every 5 minutes. Locally: `npm run check`
+// Run by .github/workflows/status.yml every hour. Locally: `npm run check`
 // (without SMTP env vars, the email check reports "unknown" and alerts are only logged).
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -236,6 +236,13 @@ const formatDuration = (ms) => {
   return minutes % 60 ? `${hours} h ${minutes % 60} min` : `${hours} h`;
 };
 
+const every = (minutes) =>
+  minutes % 60 === 0
+    ? minutes === 60
+      ? 'every hour'
+      : `every ${minutes / 60} hours`
+    : `every ${minutes} minutes`;
+
 const escapeHtml = (text) =>
   String(text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -273,7 +280,7 @@ function buildEmail(alerts, config) {
     <div style="background:#0f3d3f;color:#00e0b0;padding:16px;font-size:18px;font-weight:700;border-radius:8px 8px 0 0">${escapeHtml(config.title)}</div>
     <table style="width:100%;border-collapse:collapse;border:1px solid #e6eaea;border-top:0">${alerts.map(row).join('')}</table>
     ${url ? `<p style="margin:16px 0"><a href="${escapeHtml(url)}" style="background:#197176;color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none;display:inline-block">Open status page</a></p>` : ''}
-    <p style="color:#8a9a9b;font-size:12px">Sent by the Hesty status monitor. Checks run every ${config.intervalMinutes ?? 5} minutes.</p>
+    <p style="color:#8a9a9b;font-size:12px">Sent by the Hesty status monitor. Checks run ${every(config.intervalMinutes ?? 5)}.</p>
   </div>`;
   const text = alerts
     .map((a) =>
