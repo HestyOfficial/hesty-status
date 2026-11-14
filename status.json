@@ -1,0 +1,626 @@
+{
+ "title": "Hesty Status",
+ "site": "https://hesty.io",
+ "generatedAt": "2026-11-14T10:37:54.706Z",
+ "intervalMinutes": 60,
+ "historyDays": 90,
+ "groups": [
+  {
+   "name": "Hesty",
+   "services": [
+    "website",
+    "api",
+    "database",
+    "assets",
+    "email"
+   ]
+  },
+  {
+   "name": "Blockchain",
+   "services": [
+    "base-rpc",
+    "base-network"
+   ]
+  },
+  {
+   "name": "Third parties",
+   "services": [
+    "reown",
+    "monerium",
+    "onfido",
+    "coinbase-cdp",
+    "digitalocean"
+   ]
+  }
+ ],
+ "services": {
+  "website": {
+   "name": "Website",
+   "description": "hesty.io loads",
+   "group": "Hesty",
+   "link": "https://hesty.io",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 490,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "api": {
+   "name": "API",
+   "description": "The Hesty backend answers requests (login uses this endpoint)",
+   "group": "Hesty",
+   "link": null,
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 481,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "database": {
+   "name": "Database",
+   "description": "The backend can reach its database",
+   "group": "Hesty",
+   "link": null,
+   "status": "up",
+   "since": "2026-11-08T17:52:04.383Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 512,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 9,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "assets": {
+   "name": "Files & translations (CDN)",
+   "description": "Images, documents and translations served from DigitalOcean Spaces",
+   "group": "Hesty",
+   "link": null,
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 289,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "email": {
+   "name": "Email delivery",
+   "description": "The SMTP server Hesty sends emails through accepts logins",
+   "group": "Hesty",
+   "link": null,
+   "status": "up",
+   "since": "2026-11-08T17:36:15.732Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 1873,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "base-rpc": {
+   "name": "Base RPC",
+   "description": "Base mainnet answers and keeps producing blocks",
+   "group": "Blockchain",
+   "link": null,
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 378,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "base-network": {
+   "name": "Base network",
+   "description": "Base's own status page",
+   "group": "Blockchain",
+   "link": "https://status.base.org",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": null,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "reown": {
+   "name": "Reown (login & wallets)",
+   "description": "Email/social login, embedded wallets and WalletConnect",
+   "group": "Third parties",
+   "link": "https://status.reown.com",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": null,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "monerium": {
+   "name": "Monerium (IBAN & EURe)",
+   "description": "Monerium API answers",
+   "group": "Third parties",
+   "link": "https://monerium.com",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": 694,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "onfido": {
+   "name": "Onfido (KYC)",
+   "description": "Identity verification, Europe region",
+   "group": "Third parties",
+   "link": "https://status.onfido.com",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": null,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "coinbase-cdp": {
+   "name": "Coinbase Developer Platform",
+   "description": "CDP wallets and onchain tools",
+   "group": "Third parties",
+   "link": "https://status.coinbase.com",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": null,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  },
+  "digitalocean": {
+   "name": "DigitalOcean (hosting)",
+   "description": "Servers and file storage in Frankfurt",
+   "group": "Third parties",
+   "link": "https://status.digitalocean.com",
+   "status": "up",
+   "since": "2026-11-08T17:02:09.692Z",
+   "checkedAt": "2026-11-14T10:37:54.706Z",
+   "latencyMs": null,
+   "message": null,
+   "history": {
+    "2026-11-08": {
+     "checks": 11,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-09": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-10": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-11": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-12": {
+     "checks": 4,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-13": {
+     "checks": 3,
+     "down": 0,
+     "degraded": 0
+    },
+    "2026-11-14": {
+     "checks": 2,
+     "down": 0,
+     "degraded": 0
+    }
+   }
+  }
+ },
+ "incidents": [
+  {
+   "id": "database-1794157329692",
+   "serviceId": "database",
+   "serviceName": "Database",
+   "status": "down",
+   "message": "HTTP 404",
+   "startedAt": "2026-11-08T17:02:09.692Z",
+   "resolvedAt": "2026-11-08T17:52:04.383Z",
+   "alerted": true
+  }
+ ]
+}
